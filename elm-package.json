@@ -1,7 +1,7 @@
 {
     "version": "0.0.1",
     "summary": "Langton's Ant",
-    "repository": "https://github.com/jamesporter/LangtonsAnt",
+    "repository": "https://github.com/jamesporter/langtons-ant.git",
     "license": "MIT",
     "source-directories": [
         "."
