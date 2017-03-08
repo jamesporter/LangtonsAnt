@@ -9,11 +9,22 @@ import Svg.Attributes exposing (version, viewBox, points, fill, cx, cy, r)
 import Svg.Events exposing (onClick)
 import AnimationFrame
 import Time exposing (Time, millisecond)
+import Array exposing (Array, repeat)
 
 
 updateInterval : Time
 updateInterval =
     millisecond * 100
+
+
+width : Int
+width =
+    20
+
+
+height : Int
+height =
+    20
 
 
 main : Program Never Model Msg
@@ -30,13 +41,36 @@ main =
 -- MODEL
 
 
+type Direction
+    = North
+    | West
+    | East
+    | South
+
+
+type alias Ant =
+    { x : Int
+    , y : Int
+    , direction : Direction
+    }
+
+
+type Colour
+    = Black
+    | White
+
+
 type alias Model =
-    {}
+    { grid : Array Colour
+    , ant : Ant
+    }
 
 
 model : Model
 model =
-    {}
+    { grid = repeat (width * height) White
+    , ant = { x = width // 2, y = height // 2, direction = North }
+    }
 
 
 init : ( Model, Cmd Msg )
