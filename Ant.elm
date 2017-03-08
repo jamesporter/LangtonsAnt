@@ -1,6 +1,6 @@
 module Ant exposing (..)
 
-import Html exposing (Html, text)
+import Html exposing (Html, text, div)
 import Html.Attributes exposing (style)
 import Html.Events
 import Keyboard exposing (KeyCode)
@@ -47,13 +47,13 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         TimeUpdate dt ->
-            ( updateModel dt model, Cmd.none )
+            ( model, Cmd.none )
 
 -- VIEW
 
 
 view : Model -> Html Msg
-view model =
+view model = div [] []
   
 
 -- SUBSCRIPTIONS
