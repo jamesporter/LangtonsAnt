@@ -8,7 +8,12 @@ import Svg exposing (svg, polygon, circle)
 import Svg.Attributes exposing (version, viewBox, points, fill, cx, cy, r)
 import Svg.Events exposing (onClick)
 import AnimationFrame
-import Time exposing (Time)
+import Time exposing (Time, millisecond)
+
+
+updateInterval : Time
+updateInterval =
+    millisecond * 100
 
 
 main : Program Never Model Msg
@@ -21,27 +26,31 @@ main =
         }
 
 
+
 -- MODEL
 
+
 type alias Model =
-    { 
-    }
+    {}
 
 
 model : Model
 model =
-    { 
-    }
+    {}
 
 
 init : ( Model, Cmd Msg )
 init =
     ( model, Cmd.none )
 
+
+
 -- UPDATE
+
 
 type Msg
     = TimeUpdate Time
+
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -49,12 +58,16 @@ update msg model =
         TimeUpdate dt ->
             ( model, Cmd.none )
 
+
+
 -- VIEW
 
 
 view : Model -> Html Msg
-view model = div [] []
-  
+view model =
+    div [] []
+
+
 
 -- SUBSCRIPTIONS
 
@@ -62,5 +75,5 @@ view model = div [] []
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
-        [ AnimationFrame.diffs TimeUpdate
+        [ Time.every updateInterval TimeUpdate
         ]
