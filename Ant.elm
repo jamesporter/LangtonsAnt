@@ -59,13 +59,18 @@ update msg model =
             ( model, Cmd.none )
 
 
+updateModel : Time -> Model -> Model
+updateModel dt model =
+    model
+
+
 
 -- VIEW
 
 
 view : Model -> Html Msg
 view model =
-    div [] []
+    div [] [ text (toString model) ]
 
 
 
