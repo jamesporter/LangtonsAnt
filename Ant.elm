@@ -90,12 +90,12 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         TimeUpdate dt ->
-            ( model, Cmd.none )
+            updateModel dt model
 
 
-updateModel : Time -> Model -> Model
+updateModel : Time -> Model -> ( Model, Cmd Msg)
 updateModel dt model =
-    model
+    ( model, Cmd.none )
 
 
 
@@ -121,23 +121,31 @@ viewGridElement model idx =
       x = idx % width
       y = idx // height
     in
-        case get idx model.grid of
-          Just Black ->
+        if x == model.ant.x && y == model.ant.y then
             rect [ Svg.Attributes.x  (toString (x * 400 // width))
-                    , Svg.Attributes.y (toString (y * 400 // height))
-                    , Svg.Attributes.width (toString (400 // height))
-                    , Svg.Attributes.height (toString (400 // height))
-                    , fill "#444"
-                    ] []    
-          Just White ->
-            rect [ Svg.Attributes.x  (toString (x * 400 // width + 1))
-                    , Svg.Attributes.y (toString (y * 400 // height + 1))
-                    , Svg.Attributes.width (toString (400 // height - 2))
-                    , Svg.Attributes.height (toString (400 // height - 2))
-                    , fill "#ddd"
-                    ] []    
-          _ -> 
-            rect [] []
+                        , Svg.Attributes.y (toString (y * 400 // height))
+                        , Svg.Attributes.width (toString (400 // height))
+                        , Svg.Attributes.height (toString (400 // height))
+                        , fill "#dd2211"
+                        ] []    
+        else
+            case get idx model.grid of
+            Just Black ->
+                rect [ Svg.Attributes.x  (toString (x * 400 // width))
+                        , Svg.Attributes.y (toString (y * 400 // height))
+                        , Svg.Attributes.width (toString (400 // height))
+                        , Svg.Attributes.height (toString (400 // height))
+                        , fill "#444"
+                        ] []    
+            Just White ->
+                rect [ Svg.Attributes.x  (toString (x * 400 // width + 1))
+                        , Svg.Attributes.y (toString (y * 400 // height + 1))
+                        , Svg.Attributes.width (toString (400 // height - 2))
+                        , Svg.Attributes.height (toString (400 // height - 2))
+                        , fill "#ddd"
+                        ] []    
+            _ -> 
+                rect [] []
             
 
         
