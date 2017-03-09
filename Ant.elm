@@ -9,7 +9,7 @@ import Svg.Attributes exposing (version, viewBox, points, fill, cx, cy, r)
 import Svg.Events exposing (onClick)
 import AnimationFrame
 import Time exposing (Time, millisecond)
-import Array exposing (Array, repeat)
+import Array exposing (Array, get, repeat)
 
 
 updateInterval : Time
@@ -106,20 +106,41 @@ view : Model -> Html Msg
 view model =
     Html.div
         [ style [ ( "max-width", "400px" ), ( "min-width", "280px" ), ( "flex", "1" ) ] ]
-        [ Html.h1 []
-            [ Html.text (toString (round (model.time / 1000))) ]
-        , svg [ version "1.1", viewBox "0 0 400 400" ] (viewGrid model)
+        [ svg [ version "1.1", viewBox "0 0 400 400" ] (viewGrid model)
         , div [] [ text (toString model) ]
         ]
 
 
-viewGrid : Model -> List Html Msg
+viewGrid : Model -> List (Html Msg)
 viewGrid model =
-    List.map (viewGridElement model) List.range 0 (width * height - 1)
+    List.map (viewGridElement model) (List.range 0 (width * height - 1))
 
 viewGridElement : Model -> Int -> Html Msg
 viewGridElement model idx =
-  
+    let
+      x = idx % width
+      y = idx // height
+    in
+        case get idx model.grid of
+          Just Black ->
+            rect [ Svg.Attributes.x  (toString (x * 400 // width))
+                    , Svg.Attributes.y (toString (y * 400 // height))
+                    , Svg.Attributes.width (toString (400 // height))
+                    , Svg.Attributes.height (toString (400 // height))
+                    , fill "#444"
+                    ] []    
+          Just White ->
+            rect [ Svg.Attributes.x  (toString (x * 400 // width + 1))
+                    , Svg.Attributes.y (toString (y * 400 // height + 1))
+                    , Svg.Attributes.width (toString (400 // height - 2))
+                    , Svg.Attributes.height (toString (400 // height - 2))
+                    , fill "#ddd"
+                    ] []    
+          _ -> 
+            rect [] []
+            
+
+        
 
 
 
