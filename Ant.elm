@@ -9,12 +9,12 @@ import Svg.Attributes exposing (version, viewBox, points, fill, cx, cy, r)
 import Svg.Events exposing (onClick)
 import AnimationFrame
 import Time exposing (Time, millisecond)
-import Array exposing (Array, get, repeat)
+import Array exposing (Array, get, set, repeat)
 
 
 updateInterval : Time
 updateInterval =
-    millisecond * 100
+    millisecond * 50
 
 
 width : Int
@@ -81,6 +81,30 @@ init =
 
 -- UPDATE
 
+clockwise : Ant -> Ant
+clockwise ant =
+    case ant.direction of
+        North -> { ant | direction = East, x= ant.x + 1 }
+        East ->  { ant | direction = South, y= ant.y - 1 }
+        South -> { ant | direction = West, x = ant.x - 1 }
+        West ->  { ant | direction = North, y = ant.y + 1 }
+
+
+anticlockwise : Ant -> Ant
+anticlockwise ant =
+    case ant.direction of
+        South -> { ant | direction = East, x = ant.x + 1 }
+        West ->  { ant | direction = South, y = ant.y - 1 }
+        North -> { ant | direction = West, x = ant.x - 1 }
+        East ->  { ant | direction = North, y = ant.y + 1 }
+
+
+updateAnt : Colour -> Ant -> Ant
+updateAnt colour ant =
+    case colour of
+        Black -> (anticlockwise ant)
+        White -> (clockwise ant)
+
 
 type Msg
     = TimeUpdate Time
@@ -95,7 +119,16 @@ update msg model =
 
 updateModel : Time -> Model -> ( Model, Cmd Msg)
 updateModel dt model =
-    ( model, Cmd.none )
+    let 
+        idx = model.ant.x + width * model.ant.y
+    in
+        case get idx model.grid of
+            Just White ->
+                ( { model | grid = set idx Black model.grid, ant = (updateAnt White model.ant)}, Cmd.none )
+            Just Black ->
+                ( { model | grid = set idx White model.grid, ant = (updateAnt Black model.ant)}, Cmd.none )
+            _ ->
+                ( model, Cmd.none )
 
 
 
@@ -107,7 +140,7 @@ view model =
     Html.div
         [ style [ ( "max-width", "400px" ), ( "min-width", "280px" ), ( "flex", "1" ) ] ]
         [ svg [ version "1.1", viewBox "0 0 400 400" ] (viewGrid model)
-        , div [] [ text (toString model) ]
+--        , div [] [ text (toString model) ]
         ]
 
 
@@ -147,11 +180,6 @@ viewGridElement model idx =
             _ -> 
                 rect [] []
             
-
-        
-
-
-
 -- SUBSCRIPTIONS
 
 
