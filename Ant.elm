@@ -137,11 +137,26 @@ updateModel dt model =
 
 view : Model -> Html Msg
 view model =
+    Html.div [ style [ ("width", "100%")
+                     , ("height", "100%")
+                     , ("background", "#f9f9f9")
+                     , ("color", "#222")
+                     , ("display", "flex")
+                     , ("align-items", "center")
+                     , ("justify-content", "center")
+                     , ("font-family", "Tahoma")
+                     , ("text-align", "center")
+                     ]
+             ]
+             [
     Html.div
         [ style [ ( "max-width", "400px" ), ( "min-width", "280px" ), ( "flex", "1" ) ] ]
-        [ svg [ version "1.1", viewBox "0 0 400 400" ] (viewGrid model)
+        [ Html.h1 [] [text "Langton's Ant"]
+        , svg [ version "1.1", viewBox "0 0 400 400" ] (viewGrid model)
+        , Html.a [Html.Attributes.href "https://github.com/jamesporter/langtons-ant"] [text "Source code (ELM)"]
 --        , div [] [ text (toString model) ]
         ]
+             ]
 
 
 viewGrid : Model -> List (Html Msg)
